@@ -10,47 +10,70 @@ channel: https://discord.gg/SM4WUVG
 WiringPi for Python
 ~~~~~~~~~~~~~~~~~~~
 
-WiringPi: An implementation of most of the Arduino Wiring functions for
-the Raspberry Pi.
-
-WiringPi implements new functions for managing IO expanders.
-
-**Alternative**
-
-* `GPIO Zero <https://github.com/gpiozero/gpiozero>`_ is another Python library for controlling GPIO.  It is installed by default in Raspberry Pi OS and is used in the `Raspberry Pi GPIO documentation <https://www.raspberrypi.org/documentation/usage/gpio/python/>`_.
-
 Quick Install
 =============
 
-.. image:: https://badge.fury.io/py/wiringpi.svg
-   :alt: PyPI version badge
-   :target: https://pypi.org/project/wiringpi/
+Manual Build
+============
 
-The library is packaged on PyPI and can be installed with pip:
+Get/setup repo
+--------------
 
-``pip install wiringpi``
+.. code:: bash
+
+    git clone --recursive https://github.com/edatec/phantom-wiringPi-Python.git
+    cd WiringPi-Python
+
+Don't forget the ``--recursive``; it is required to also pull in the
+WiringPi C code from its own repository.
+
+Prerequisites
+-------------
+
+To rebuild the bindings you **must** first have installed ``swig``. WiringPi should also be installed system-wide for access
+to the ``gpio`` tool.
+
+.. code:: bash
+
+    sudo apt-get install swig
+
+Build & install with
+--------------------
+
+``sudo python setup.py install``
+
+Or Python 3:
+
+``sudo python3 setup.py install``
+
 
 Usage
 =====
+
+You should add **sudo** in front of python commands.
 
 .. code:: python
 
     import wiringpi
 
-    # One of the following MUST be called before using IO functions:
-    wiringpi.wiringPiSetup()      # For sequential pin numbering
-    # OR
+    # Currently, only wiringPiSetupSys is supported ant it MUST be called before using IO functions:
     wiringpi.wiringPiSetupSys()   # For /sys/class/gpio with GPIO pin numbering
-    # OR
-    wiringpi.wiringPiSetupGpio()  # For GPIO pin numbering
 
 **General IO:**
 
 .. code:: python
 
-    wiringpi.pinMode(6, 1)       # Set pin 6 to 1 ( OUTPUT )
+    wiringpi.pinMode(6, 1)       # Set wiringpi pin 6 to 1 ( OUTPUT )
     wiringpi.digitalWrite(6, 1)  # Write 1 ( HIGH ) to pin 6
-    wiringpi.digitalRead(6)      # Read pin 6
+
+.. code:: python
+
+    wiringpi.pinMode(6, 0)                  # Set wiringpi pin 6 to 0 ( INPUT )
+    pin_input = wiringpi.digitalRead(6)     # Read wiringpi pin 6
+    if pin_input:
+        print("Input is 1")
+    else:
+        print("Input is 0")
 
 **Setting up a peripheral:**
 
@@ -92,7 +115,7 @@ useful for generating frequencies for other uses such as modulating A/C.
 
 .. code:: python
 
-    serial = wiringpi.serialOpen('/dev/ttyAMA0', 9600)  # Requires device/baud and returns an ID
+    serial = wiringpi.serialOpen('/dev/ttyS0', 9600)  # Requires device/baud and returns an ID
     wiringpi.serialPuts(serial, "hello")
     wiringpi.serialClose(serial)  # Pass in ID
 
@@ -115,38 +138,5 @@ Python 2, because then ``buf`` is a string, and strings are immutable).
 
 **Full details of the API at:** http://www.wiringpi.com
 
-Manual Build
-============
 
-Get/setup repo
---------------
-
-.. code:: bash
-
-    git clone --recursive https://github.com/WiringPi/WiringPi-Python.git
-    cd WiringPi-Python
-
-Don't forget the ``--recursive``; it is required to also pull in the
-WiringPi C code from its own repository.
-
-Prerequisites
--------------
-
-To rebuild the bindings you **must** first have installed ``swig``,
-``python-dev``, and ``python-setuptools`` (or their ``python3-``
-equivalents). WiringPi should also be installed system-wide for access
-to the ``gpio`` tool.
-
-.. code:: bash
-
-    sudo apt-get install python-dev python-setuptools swig wiringpi
-
-Build & install with
---------------------
-
-``sudo python setup.py install``
-
-Or Python 3:
-
-``sudo python3 setup.py install``
 
