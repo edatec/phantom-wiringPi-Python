@@ -10,10 +10,7 @@ channel: https://discord.gg/SM4WUVG
 WiringPi for Python
 ~~~~~~~~~~~~~~~~~~~
 
-Quick Install
-=============
-
-Manual Build
+Manual Build and Install
 ============
 
 Get/setup repo
@@ -22,7 +19,7 @@ Get/setup repo
 .. code:: bash
 
     git clone --recursive https://github.com/edatec/phantom-wiringPi-Python.git
-    cd WiringPi-Python
+    cd phantom-wiringPi-Python
 
 Don't forget the ``--recursive``; it is required to also pull in the
 WiringPi C code from its own repository.
@@ -30,8 +27,8 @@ WiringPi C code from its own repository.
 Prerequisites
 -------------
 
-To rebuild the bindings you **must** first have installed ``swig``. WiringPi should also be installed system-wide for access
-to the ``gpio`` tool.
+To rebuild the bindings you **must** first have installed ``swig``. ``python3-dev`` and ``python-setuptools`` are already pre-installed in the Phantom system.
+phantom wiringPi should also be installed system-wide for access to the ``gpio`` tool.
 
 .. code:: bash
 
